@@ -74,4 +74,4 @@ Pull requests and feature suggestions are welcome! 🙌
 
 ## 📜 License
 
-MIT License © 2025 — Made with ❤️ by \[Your Name]
+MIT License © 2025 — Made with ❤️ by \[Bobomurod]
