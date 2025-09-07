@@ -2,7 +2,7 @@
 
 A simple **frontend-only** playground for experimenting with different hashing algorithms. Built with **HTML, JavaScript, and Tailwind CSS**, featuring **Dark/Light mode**, hash generation, and verification.
 
-![Preview](./assets/light-mode.png)
+![Preview](./assets/light.png)
 
 ---
 
