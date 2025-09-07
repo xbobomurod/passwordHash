@@ -1,0 +1,350 @@
+<html lang="en" class="antialiased">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Password Hash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <div class="min-h-screen flex flex-col realative">
+    <!-- Header -->
+    <header
+      class="flex items-center justify-between gap-4 p-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 transition-colors duration-300 fixed top-0 left-0 right-0 z-10">
+      <div>
+        <h1 class="text-lg md:text-xl font-semibold">Password Hash </h1>
+        <!-- <p class="text-xs md:text-sm text-gray-600 dark:text-gray-400">Hash generator & verifier — frontend-only</p> -->
+      </div>
+      <button id="modeToggle"
+        class="flex items-center gap-2 px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm transition-colors duration-300">
+        <i class="fa-solid fa-moon"></i><span>Dark</span>
+      </button>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 p-4 pt-20 md:p-20 ">
+      <div class="max-w-6xl mx-auto space-y-6">
+
+        <div class="flex flex-col md:flex-row gap-6">
+          <!-- Settings -->
+          <section class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6 flex-1 transition-colors duration-300">
+            <h2 class="text-base md:text-lg font-medium">Algorithm Settings</h2>
+            <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">Choose algorithm and options.</p>
+
+            <div class="mt-4 space-y-3">
+              <div class="flex items-center gap-3">
+                <label class="text-sm">Algorithm</label>
+                <select id="algoSelect"
+                  class="ml-auto w-32 px-2 py-1 rounded border dark:border-gray-700 bg-white dark:bg-gray-700 text-sm transition-colors duration-300">
+                  <option value="bcrypt">bcrypt</option>
+                  <option value="sha256">SHA-256</option>
+                  <option value="md5">MD5</option>
+                  <option value="base64">Base64</option>
+                </select>
+              </div>
+
+              <div id="saltRoundsWrap" class="flex items-center gap-3">
+                <label class="text-sm">Salt rounds</label>
+                <select id="saltRounds"
+                  class="ml-auto w-24 px-2 py-1 rounded border dark:border-gray-700 bg-white dark:bg-gray-700 text-sm transition-colors duration-300"></select>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Generator -->
+          <section class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6 transition-colors duration-300">
+            <h2 class="text-base md:text-lg font-medium">Hash Generator</h2>
+            <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">Write a password/text and create a hash.</p>
+
+            <div class="mt-4 space-y-3">
+              <input id="genPassword" type="text" placeholder="Type text..."
+                class="w-full px-3 py-2 rounded border dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors duration-300" />
+
+              <div class="flex gap-2">
+                <button id="genBtn"
+                  class="flex-1 px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm">Generate
+                  Hash</button>
+                <button id="genClear"
+                  class="px-4 py-2 rounded border dark:border-gray-700 text-sm transition-colors duration-300">Clear</button>
+              </div>
+
+              <div>
+                <label class="text-sm">Hash</label>
+                <div class="mt-2 flex gap-2 items-start">
+                  <pre id="genResult"
+                    class="flex-1 p-3 rounded bg-gray-50 dark:bg-gray-900/40 border dark:border-gray-700 overflow-x-auto text-xs md:text-sm transition-colors duration-300"></pre>
+                  <button id="copyBtn"
+                    class="px-3 py-2 rounded bg-emerald-500 hover:bg-emerald-600 text-white text-xs">Copy</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Verifier -->
+          <section class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6 transition-colors duration-300">
+            <h2 class="text-base md:text-lg font-medium">Hash Verifier</h2>
+            <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">Paste a hash and the original text —
+              verification is automatic (bcrypt only).</p>
+
+            <div class="mt-4 space-y-3">
+              <input id="inputHash" type="text" placeholder="Paste hash here..."
+                class="w-full px-3 py-2 rounded border dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40 focus:outline-none transition-colors duration-300" />
+              <input id="verifyPassword" type="text" placeholder="Type text to verify..."
+                class="w-full px-3 py-2 rounded border dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40 focus:outline-none transition-colors duration-300" />
+
+              <div class="flex gap-2 items-center">
+                <button id="verifyClear"
+                  class="px-4 py-2 rounded border dark:border-gray-700 text-sm transition-colors duration-300">Clear</button>
+                <div id="verifyResult" class="ml-auto text-sm font-medium"></div>
+              </div>
+
+              <div class="pt-2 text-xs text-gray-400">Tip: Bcrypt hashes can be generated on the left and pasted here.
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- History -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300">History</h3>
+          <div id="historyList" class="mt-2 space-y-2"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Notification -->
+    <div id="notification"
+      class="fixed right-4 bottom-4 bg-emerald-500 text-white px-3 py-2 rounded shadow hidden text-sm"></div>
+  </div>
+
+  <!-- bcryptjs CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+  <!-- js-md5 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+
+  <script>
+    const $ = (id) => document.getElementById(id)
+
+    // Inject salt rounds
+    const saltSelect = $('saltRounds')
+    for (let i = 4; i <= 15; i++) {
+      const opt = document.createElement('option')
+      opt.value = i; opt.textContent = i; if (i === 10) opt.selected = true
+      saltSelect.appendChild(opt)
+    }
+
+    const modeToggle = document.getElementById('modeToggle')
+    const icon = modeToggle.querySelector('i')
+    const label = modeToggle.querySelector('span')
+
+    const genBtn = $('genBtn')
+    const genClear = $('genClear')
+    const copyBtn = $('copyBtn')
+    const genResult = $('genResult')
+    const genPassword = $('genPassword')
+    const algoSelect = $('algoSelect')
+    const saltRoundsWrap = $('saltRoundsWrap')
+
+    const inputHash = $('inputHash')
+    const verifyPassword = $('verifyPassword')
+    const verifyResult = $('verifyResult')
+    const verifyClear = $('verifyClear')
+
+    const notification = $('notification')
+    const historyList = $('historyList')
+
+    let currentHash = ''
+    const history = []
+
+    // show/hide salt rounds for bcrypt only
+    algoSelect.addEventListener('change', () => {
+      saltRoundsWrap.style.display = algoSelect.value === 'bcrypt' ? 'flex' : 'none'
+      // update verifier hint
+      const hint = document.querySelector('#verifyResult').previousElementSibling?.nextElementSibling
+    })
+
+    genBtn.addEventListener('click', async () => {
+      const txt = genPassword.value.trim()
+      if (!txt) return showNotif('Please type text')
+      const algo = algoSelect.value
+      genBtn.disabled = true; genBtn.textContent = 'Generating...'
+      try {
+        let hash = ''
+        if (algo === 'bcrypt') {
+          const rounds = parseInt(saltSelect.value, 10)
+          hash = await dcodeIO.bcrypt.hash(txt, rounds)
+        } else if (algo === 'sha256') {
+          const buf = new TextEncoder().encode(txt)
+          const digest = await crypto.subtle.digest('SHA-256', buf)
+          hash = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('')
+        } else if (algo === 'md5') {
+          hash = md5(txt)
+        } else if (algo === 'base64') {
+          // base64 uses btoa (works for ASCII/UTF-8 via encoding)
+          try {
+            hash = btoa(unescape(encodeURIComponent(txt)))
+          } catch (e) {
+            // fallback
+            hash = btoa(txt)
+          }
+        }
+        currentHash = hash
+        genResult.textContent = hash
+        history.unshift({ txt, hash, algo, t: new Date().toLocaleString() })
+        renderHistory()
+      } catch {
+        showNotif('Error generating hash')
+      } finally {
+        genBtn.disabled = false; genBtn.textContent = 'Generate Hash'
+      }
+    })
+
+    genClear.addEventListener('click', () => {
+      genPassword.value = ''
+      genResult.textContent = ''
+      currentHash = ''
+    })
+
+    copyBtn.addEventListener('click', async () => {
+      const text = genResult.textContent.trim()
+      if (!text) return showNotif('No hash to copy')
+      try {
+        await navigator.clipboard.writeText(text)
+        showNotif('✅ Hash copied')
+      } catch {
+        showNotif('Could not copy')
+      }
+    })
+
+    let verifyTimer = null
+    verifyPassword.addEventListener('input', () => {
+      if (verifyTimer) clearTimeout(verifyTimer)
+      verifyTimer = setTimeout(autoVerify, 250)
+    })
+    inputHash.addEventListener('input', () => {
+      if (verifyTimer) clearTimeout(verifyTimer)
+      verifyTimer = setTimeout(autoVerify, 250)
+    })
+
+    verifyClear.addEventListener('click', () => {
+      inputHash.value = ''
+      verifyPassword.value = ''
+      verifyResult.textContent = ''
+      verifyResult.classList.remove('text-emerald-400', 'text-rose-400')
+    })
+
+    // autoVerify now supports bcrypt (compare) and non-bcrypt (recompute and compare)
+    async function autoVerify() {
+      const h = inputHash.value.trim()
+      const p = verifyPassword.value
+      if (!h || !p) { verifyResult.textContent = ''; verifyResult.classList.remove('text-emerald-400', 'text-rose-400'); return }
+      const algo = algoSelect.value
+
+      try {
+        if (algo === 'bcrypt') {
+          const ok = await dcodeIO.bcrypt.compare(p, h)
+          verifyResult.textContent = ok ? '✅ Verified (bcrypt)' : '❌ Not verified'
+          verifyResult.classList.toggle('text-emerald-400', ok)
+          verifyResult.classList.toggle('text-rose-400', !ok)
+        } else if (algo === 'sha256') {
+          const buf = new TextEncoder().encode(p)
+          const digest = await crypto.subtle.digest('SHA-256', buf)
+          const computed = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('')
+          const ok = computed === h
+          verifyResult.textContent = ok ? '✅ Verified (SHA-256)' : '❌ Not verified'
+          verifyResult.classList.toggle('text-emerald-400', ok)
+          verifyResult.classList.toggle('text-rose-400', !ok)
+        } else if (algo === 'md5') {
+          const computed = md5(p)
+          const ok = computed === h
+          verifyResult.textContent = ok ? '✅ Verified (MD5)' : '❌ Not verified'
+          verifyResult.classList.toggle('text-emerald-400', ok)
+          verifyResult.classList.toggle('text-rose-400', !ok)
+        } else if (algo === 'base64') {
+          let computed = ''
+          try {
+            computed = btoa(unescape(encodeURIComponent(p)))
+          } catch (e) {
+            computed = btoa(p)
+          }
+          const ok = computed === h
+          verifyResult.textContent = ok ? '✅ Verified (Base64)' : '❌ Not verified'
+          verifyResult.classList.toggle('text-emerald-400', ok)
+          verifyResult.classList.toggle('text-rose-400', !ok)
+        }
+      } catch (e) {
+        verifyResult.textContent = 'Invalid hash or error'
+        verifyResult.classList.remove('text-emerald-400')
+        verifyResult.classList.add('text-rose-400')
+      }
+    }
+
+    let notifTimer = null
+    function showNotif(msg) {
+      if (notifTimer) clearTimeout(notifTimer)
+      notification.textContent = msg
+      notification.classList.remove('hidden')
+      notifTimer = setTimeout(() => notification.classList.add('hidden'), 1800)
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = ''
+      history.slice(0, 8).forEach((item, idx) => {
+        const el = document.createElement('div')
+        el.className = 'flex flex-col md:flex-row items-start md:items-center justify-between gap-3 p-3 bg-white dark:bg-gray-800 rounded border dark:border-gray-700 transition-colors duration-300'
+        el.innerHTML = `<div class="flex-1 text-xs md:text-sm break-all"><div class="text-xs text-gray-500 dark:text-gray-400">${item.t} • ${item.algo}</div><div class="font-mono mt-1">${item.hash}</div></div><div class="flex gap-2"><button class="px-2 py-1 text-xs rounded bg-indigo-600 text-white" data-idx="${idx}">Use</button><button class="px-2 py-1 text-xs rounded border" data-del="${idx}">Delete</button></div>`
+        historyList.appendChild(el)
+      })
+
+      historyList.querySelectorAll('button[data-idx]').forEach(btn => btn.addEventListener('click', (e) => {
+        const i = Number(e.target.getAttribute('data-idx'))
+        const item = history[i]
+        if (item) {
+          inputHash.value = item.hash
+          showNotif('Hash pasted to verifier')
+          autoVerify()
+        }
+      }))
+
+      historyList.querySelectorAll('button[data-del]').forEach(btn => btn.addEventListener('click', (e) => {
+        const i = Number(e.target.getAttribute('data-del'))
+        history.splice(i, 1)
+        renderHistory()
+      }))
+    }
+
+    // Dark/light toggle
+    const saved = localStorage.getItem('theme')
+    if (saved === 'dark') document.documentElement.classList.add('dark')
+    updateModeText()
+
+    modeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark')
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
+      updateModeText()
+    })
+
+    function updateModeText() {
+      if (document.documentElement.classList.contains('dark')) {
+        icon.className = 'fa-solid fa-sun'
+        // label.textContent = 'Light'
+      } else {
+        icon.className = 'fa-solid fa-moon'
+        // label.textContent = ''
+      }
+    }
+  </script>
+</body>
+
+</html>

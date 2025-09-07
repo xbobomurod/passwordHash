@@ -1,0 +1,91 @@
+/* Umumiy */
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	transition: background 0.3s, color 0.3s;
+}
+
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	background: #4a90e2;
+	color: white;
+}
+
+h1,
+h2 {
+	margin: 0.5rem 0;
+}
+
+main {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	padding: 2rem;
+	gap: 2rem;
+}
+
+section {
+	flex: 1 1 300px;
+	padding: 1rem;
+	border-radius: 8px;
+	background: var(--card-bg);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+input,
+select,
+button,
+pre {
+	display: block;
+	margin: 0.5rem 0;
+	padding: 0.5rem;
+	width: 100%;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+}
+
+button {
+	cursor: pointer;
+	background: #4a90e2;
+	color: white;
+	border: none;
+}
+
+button:hover {
+	background: #357ab8;
+}
+
+/* Notification */
+#notification {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background: #4caf50;
+	color: white;
+	padding: 0.8rem 1.2rem;
+	border-radius: 8px;
+	display: none;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode */
+:root {
+	--bg: #ffffff;
+	--text: #000000;
+	--card-bg: #f9f9f9;
+}
+
+body.dark {
+	--bg: #1e1e1e;
+	--text: #e0e0e0;
+	--card-bg: #2c2c2c;
+}
+
+body {
+	background: var(--bg);
+	color: var(--text);
+}
